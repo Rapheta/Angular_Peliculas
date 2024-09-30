@@ -9,52 +9,58 @@ import { HttpResponse } from '@angular/common/http';
 import { PaginacionDTO } from '../../compartidos/modelos/PaginacionDTO';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { IndiceEntidadComponent } from "../../compartidos/componentes/indice-entidad/indice-entidad.component";
+import { SERVICIO_CRUD_TOKEN } from '../../compartidos/proveedores/proveedores';
 
 @Component({
   selector: 'app-indice-generos',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, ListadoGenericoComponent, MatTableModule, MatPaginatorModule, SweetAlert2Module],
+  imports: [IndiceEntidadComponent], //RouterLink, MatButtonModule, ListadoGenericoComponent, MatTableModule, MatPaginatorModule, SweetAlert2Module, 
   templateUrl: './indice-generos.component.html',
-  styleUrl: './indice-generos.component.css'
+  styleUrl: './indice-generos.component.css',
+  providers: [
+    { provide: SERVICIO_CRUD_TOKEN, useClass: GenerosService }
+  ]
 })
 export class IndiceGenerosComponent {
 
-  generosService = inject(GenerosService);
-  generos!: GeneroDto[];
-  columnasAMostrar: string[] = ['id','nombre','acciones'];
-  paginacion: PaginacionDTO = { pagina: 1, recordsPorPagina: 5};
-  cantidadTotalRegistros!: number;
+  //generosService = inject(GenerosService);
+  //generos!: GeneroDto[];
+  //columnasAMostrar: string[] = ['id','nombre','acciones'];
+  //paginacion: PaginacionDTO = { pagina: 1, recordsPorPagina: 5};
+  //cantidadTotalRegistros!: number;
 
   /**
    *
    */
-  constructor() {
-    this.cargarRegistros();
-  }
+  //constructor() {
+  //  this.cargarRegistros();
+  //}
 
-  cargarRegistros() {
+  //cargarRegistros() {
     //Sin Paginacion
     //const generos = this.generosService.obtenerTodos().subscribe(generos => {
     //  this.generos = generos;
     //});
 
-    const generos = this.generosService.obtenerPaginado(this.paginacion).subscribe(( respuesta: HttpResponse<GeneroDto[]> ) => {
-      this.generos = respuesta.body as GeneroDto[];
-      const cabecera = respuesta.headers.get("cantidad-total-registros") as string;
-      this.cantidadTotalRegistros = parseInt(cabecera, 10);
-    });
-  }
+    //Con Paginacion
+    //const generos = this.generosService.obtenerPaginado(this.paginacion).subscribe(( respuesta: HttpResponse<GeneroDto[]> ) => {
+    //  this.generos = respuesta.body as GeneroDto[];
+    //  const cabecera = respuesta.headers.get("cantidad-total-registros") as string;
+    //  this.cantidadTotalRegistros = parseInt(cabecera, 10);
+    //});
+  //}
 
-  actualizarPaginacion(datos: PageEvent){
-    console.log(datos);
-    this.paginacion = { pagina: datos.pageIndex + 1, recordsPorPagina: datos.pageSize };
-    this.cargarRegistros();
-  }
+  //actualizarPaginacion(datos: PageEvent){
+  //  console.log(datos);
+  //  this.paginacion = { pagina: datos.pageIndex + 1, recordsPorPagina: datos.pageSize };
+  //  this.cargarRegistros();
+  //}
 
-  borrar(id:number){
-    this.generosService.borrar(id).subscribe(() => {
-      this.paginacion.pagina = 1;
-      this.cargarRegistros();
-    });
-  }
+  //borrar(id:number){
+    //this.generosService.borrar(id).subscribe(() => {
+      //this.paginacion.pagina = 1;
+      //this.cargarRegistros();
+    //});
+  //}
 }

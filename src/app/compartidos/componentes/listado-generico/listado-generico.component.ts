@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { CargandoComponent } from "../cargando/cargando.component";
 
 @Component({
   selector: 'app-listado-generico',
   standalone: true,
-  imports: [],
+  imports: [CargandoComponent],
   templateUrl: './listado-generico.component.html',
   styleUrl: './listado-generico.component.css'
 })

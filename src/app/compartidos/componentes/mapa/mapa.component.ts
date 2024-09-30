@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { icon, latLng, LeafletMouseEvent, marker, Marker, MarkerOptions, tileLayer } from 'leaflet';
+import { icon, LatLng, latLng, LeafletMouseEvent, marker, Marker, MarkerOptions, tileLayer } from 'leaflet';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import "leaflet/dist/leaflet.css";
 import { Coordenada } from './coordenada';
@@ -16,6 +16,7 @@ export class MapaComponent implements OnInit {
   ngOnInit(): void {
     this.capas = this.coordenadasIniciales.map( valor => {
       const marcador = marker([valor.latitud, valor.longitud], this.markerOptions);
+      this.options.center = new LatLng(valor.latitud, valor.longitud);
       return marcador;
     });
   }

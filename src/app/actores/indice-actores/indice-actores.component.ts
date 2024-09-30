@@ -9,17 +9,22 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ListadoGenericoComponent } from "../../compartidos/componentes/listado-generico/listado-generico.component";
 import { MatTableModule } from '@angular/material/table';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { IndiceEntidadComponent } from "../../compartidos/componentes/indice-entidad/indice-entidad.component";
+import { SERVICIO_CRUD_TOKEN } from '../../compartidos/proveedores/proveedores';
 
 @Component({
   selector: 'app-indice-actores',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, ListadoGenericoComponent, MatTableModule, MatPaginatorModule, SweetAlert2Module],
+  imports: [IndiceEntidadComponent], //RouterLink, MatButtonModule, ListadoGenericoComponent, MatTableModule, MatPaginatorModule, SweetAlert2Module, 
   templateUrl: './indice-actores.component.html',
-  styleUrl: './indice-actores.component.css'
+  styleUrl: './indice-actores.component.css',
+  providers: [
+    { provide: SERVICIO_CRUD_TOKEN, useClass: ActoresService }
+  ]
 })
 export class IndiceActoresComponent {
 
-  actoresService = inject(ActoresService);
+  /* actoresService = inject(ActoresService);
   actores!: ActorDTO[];
   columnasAMostrar: string[] = ['id','nombre','acciones'];
   paginacion: PaginacionDTO = { pagina: 1, recordsPorPagina: 5};
@@ -52,6 +57,6 @@ export class IndiceActoresComponent {
       this.paginacion.pagina = 1;
       this.cargarRegistros();
     })
-  }
+  } */
 
 }

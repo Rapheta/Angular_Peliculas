@@ -5,11 +5,12 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { PaginacionDTO } from '../compartidos/modelos/PaginacionDTO';
 import { construirQueryParams } from '../compartidos/funciones/construirQueryParams';
+import { IServicioCRUD } from '../compartidos/interfaces/IServicioCRUD';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GenerosService {
+export class GenerosService implements IServicioCRUD<GeneroDto,GeneroCreacionDto> {
 
   private http = inject(HttpClient);
   private urlBase = environment.apiURL + '/generos';
@@ -26,7 +27,7 @@ export class GenerosService {
     //return this.http.get<GeneroDto[]>(this.urlBase);
   //}
 
-  public crear(genero: GeneroCreacionDto)
+  public crear(genero: GeneroCreacionDto): Observable<any>
   {
     return this.http.post(this.urlBase, genero);
   }
@@ -35,11 +36,11 @@ export class GenerosService {
     return this.http.get<GeneroDto>(`${this.urlBase}/${id}`);
   }
 
-  public actualizar(id: number, genero: GeneroCreacionDto){
+  public actualizar(id: number, genero: GeneroCreacionDto): Observable<any>{
     return this.http.put(`${this.urlBase}/${id}`, genero);
   }
 
-  public borrar(id: number) {
+  public borrar(id: number): Observable<any> {
     return this.http.delete(`${this.urlBase}/${id}`);
   }
 }

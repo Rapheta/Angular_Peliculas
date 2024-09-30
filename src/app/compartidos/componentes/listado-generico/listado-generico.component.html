@@ -4,7 +4,8 @@
     </div>
 
     @if(!cargando.innerHTML.trim()){
-        <img src="loading.gif" />
+        <!-- <img src="loading.gif" /> -->
+         <app-cargando></app-cargando>
     }
   }
   @else if(listado.length === 0){
