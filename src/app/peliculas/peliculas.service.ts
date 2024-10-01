@@ -16,7 +16,7 @@ export class PeliculasService {
 
   public crearGet(): Observable<PeliculasPostGetDTO>
   {
-    return this.http.get<PeliculasPostGetDTO>(`${ this.urlBase }/PostGet`);
+    return this.http.get<PeliculasPostGetDTO>(`${ this.urlBase }/postget`);
   }
 
   public crear(pelicula: PeliculaCreacionDTO): Observable<PeliculaDTO>
@@ -41,7 +41,7 @@ export class PeliculasService {
 
     formData.append('generosIds', JSON.stringify(pelicula.generosIds));
     formData.append('cinesIds', JSON.stringify(pelicula.cinesIds));
-    formData.append('actoresIds', JSON.stringify(pelicula.actores));
+    formData.append('actores', JSON.stringify(pelicula.actores));
 
     return formData;
   }
