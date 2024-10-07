@@ -1,20 +1,43 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ListadoPeliculasComponent } from '../peliculas/listado-peliculas/listado-peliculas.component';
 import { RatingComponent } from '../compartidos/componentes/rating/rating.component';
+import { PeliculasService } from '../peliculas/peliculas.service';
+import { subscribeOn } from 'rxjs';
+import { AutorizadoComponent } from "../seguridad/autorizado/autorizado.component";
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [ListadoPeliculasComponent, RatingComponent],
+  imports: [ListadoPeliculasComponent, RatingComponent, AutorizadoComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })
-export class LandingPageComponent implements OnInit {
+export class LandingPageComponent { //implements OnInit {
   
   peliculasEnCines!: any[];
   peliculasProximosEstrenos!: any[];
 
-  ngOnInit(): void {
+  peliculasService = inject(PeliculasService);
+
+  constructor() {
+    this.cargarPeliculas();
+  }
+
+  cargarPeliculas(){
+    this.peliculasService.ObtenerLandingPage().subscribe(modelo => {
+      this.peliculasEnCines = modelo.enCines;
+      this.peliculasProximosEstrenos = modelo.proximosEstrenos;
+    });
+  }
+
+  peliculaBorrada() {
+    this.cargarPeliculas();
+  }
+
+  /* ngOnInit(): void {
+
+
+
     setTimeout(() => {
       
       this.peliculasEnCines = [{
@@ -56,8 +79,9 @@ export class LandingPageComponent implements OnInit {
         poster: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/ed/The_Flash_%28film%29_poster.jpg/220px-The_Flash_%28film%29_poster.jpg'
       }];
 
-    }, 100);
+    }, 100); 
   }
+    */
 
   procesarVoto(voto:number) {
     alert(`Calificación otorgada: ${voto}`);

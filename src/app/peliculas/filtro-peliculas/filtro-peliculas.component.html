@@ -27,6 +27,8 @@
     <div>
         <button mat-flat-button color="warn" (click)="limpiar()">Limpiar</button>
     </div>
-
-    <app-listado-peliculas [peliculas]="peliculas"></app-listado-peliculas>
 </form>
+
+<app-listado-peliculas [peliculas]="peliculas"></app-listado-peliculas>
+
+<mat-paginator showFirstLastButtons [length]="cantidadTotalRegistros" [pageIndex]="paginacion.pagina - 1" [pageSize]="paginacion.recordsPorPagina" [pageSizeOptions]="[5,10,50]" class="mat-elevation-z8" (page)="actualizarPaginacion($event)"></mat-paginator>

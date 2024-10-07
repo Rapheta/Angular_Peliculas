@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { PeliculaCreacionDTO, PeliculaDTO, PeliculasPostGetDTO } from './peliculas';
+import { LandingPageDTO, PeliculaCreacionDTO, PeliculaDTO, PeliculasPostGetDTO, PeliculasPutGetDTO } from './peliculas';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,6 +14,20 @@ export class PeliculasService {
 
   constructor() { }
 
+  public ObtenerLandingPage(): Observable<LandingPageDTO>{
+    return this.http.get<LandingPageDTO>(`${ this.urlBase }/landing`);
+  }
+
+  public obtenerPorId(id: number): Observable<PeliculaDTO>
+  {
+    return this.http.get<PeliculaDTO>(`${this.urlBase}/${id}`);
+  }
+
+  public filtrar(valores: any): Observable<HttpResponse<PeliculaDTO[]>> {
+    const params = new HttpParams({fromObject: valores});
+    return this.http.get<PeliculaDTO[]>(`${this.urlBase}/filtrar`, { params, observe: 'response' });
+  }
+
   public crearGet(): Observable<PeliculasPostGetDTO>
   {
     return this.http.get<PeliculasPostGetDTO>(`${ this.urlBase }/postget`);
@@ -23,6 +37,21 @@ export class PeliculasService {
   {
     const formData = this.construirFormData(pelicula);
     return this.http.post<PeliculaDTO>(this.urlBase, formData);
+  }
+
+  public actualizarGet(id: number): Observable<PeliculasPutGetDTO>
+  {
+    return this.http.get<PeliculasPutGetDTO>(`${ this.urlBase }/putget/${id}`);
+  }
+
+  public actualizar(id: number, pelicula: PeliculaCreacionDTO)
+  {
+    const formData = this.construirFormData(pelicula);
+    return this.http.put<PeliculaCreacionDTO>(`${ this.urlBase }/${id}`, formData);
+  }
+
+  public borrar(id: number){
+    return this.http.delete(`${this.urlBase}/${id}`);
   }
 
   private construirFormData(pelicula: PeliculaCreacionDTO): FormData {

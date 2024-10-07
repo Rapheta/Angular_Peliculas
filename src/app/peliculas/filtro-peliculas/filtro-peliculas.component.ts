@@ -11,30 +11,51 @@ import { FiltroPeliculas } from './filtroPelicula';
 import { Location } from '@angular/common';
 import { query } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
+import { GeneroDto } from '../../generos/generos';
+import { PeliculaDTO } from '../peliculas';
+import { GenerosService } from '../../generos/generos.service';
+import { PeliculasService } from '../peliculas.service';
+import { PaginacionDTO } from '../../compartidos/modelos/PaginacionDTO';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-filtro-peliculas',
   standalone: true,
-  imports: [MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatCheckboxModule, ListadoPeliculasComponent],
+  imports: [MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatSelectModule, MatCheckboxModule, ListadoPeliculasComponent, MatPaginatorModule],
   templateUrl: './filtro-peliculas.component.html',
   styleUrl: './filtro-peliculas.component.css'
 })
 export class FiltroPeliculasComponent implements OnInit {
 
+  generosService = inject(GenerosService);
+  peliculasService = inject(PeliculasService);
+  cantidadTotalRegistros!: number;
+  paginacion: PaginacionDTO = { pagina: 1, recordsPorPagina: 10 };
+
   ngOnInit(): void {
 
-    this.leerValoresURL();
-    this.buscarPeliculas(this.form.value as FiltroPeliculas);
+    this.generosService.obtenerTodos()
+    .pipe(
+      debounceTime(300)
+    ).subscribe(generos => {
 
-    this.form.valueChanges.subscribe( valores => {
-      this.peliculas = this.peliculasOriginal;
-      this.buscarPeliculas(valores as FiltroPeliculas);
-      this.escribirParametrosBusquedaEnURL(valores as FiltroPeliculas);
+      this.generos = generos;
+
+      this.leerValoresURL();
+      this.buscarPeliculas(this.form.value as FiltroPeliculas);
+
+      this.form.valueChanges.subscribe( valores => {
+        this.buscarPeliculas(valores as FiltroPeliculas);
+        this.escribirParametrosBusquedaEnURL(valores as FiltroPeliculas);
+      });
+
     });
+
   }
 
   buscarPeliculas(valores: FiltroPeliculas){
-    if(valores.titulo)
+    /* if(valores.titulo)
     {
       this.peliculas = this.peliculas.filter(pelicula => pelicula.titulo.indexOf(valores.titulo) !== -1);
     }
@@ -50,9 +71,18 @@ export class FiltroPeliculasComponent implements OnInit {
     }
 
     if(valores.enCines)
-      {
-        this.peliculas = this.peliculas.filter(pelicula => pelicula.enCines);
-      }
+    {
+      this.peliculas = this.peliculas.filter(pelicula => pelicula.enCines);
+    } */
+
+    valores.pagina = this.paginacion.pagina;
+    valores.recordsPorPagina = this.paginacion.recordsPorPagina;
+
+    this.peliculasService.filtrar(valores).subscribe(respuesta => {
+      this.peliculas = respuesta.body as PeliculaDTO[];
+      const cabecera = respuesta.headers.get('cantidad-total-registros') as string;
+      this.cantidadTotalRegistros = parseInt(cabecera, 10);
+    });
   }
 
   escribirParametrosBusquedaEnURL(valores: FiltroPeliculas) {
@@ -112,6 +142,11 @@ export class FiltroPeliculasComponent implements OnInit {
     })
   }
 
+  actualizarPaginacion(datos: PageEvent){
+    this.paginacion = { pagina: datos.pageIndex + 1, recordsPorPagina: datos.pageSize };
+    this.buscarPeliculas(this.form.value as FiltroPeliculas);
+  }
+
   private formBuilder = inject(FormBuilder);
   private location = inject(Location);
   private activatedRoute = inject(ActivatedRoute);
@@ -123,13 +158,17 @@ export class FiltroPeliculasComponent implements OnInit {
     enCines: false
   });
 
-  generos = [
+  /* generos = [
     { id: 1, nombre: "Drama" },
     { id: 2, nombre: "Acción" },
     { id: 3, nombre: "Comedia" },
-  ];
+  ]; */
 
-  peliculasOriginal = [{
+  generos!: GeneroDto[];
+
+  peliculas!: PeliculaDTO[];
+
+  /* peliculasOriginal = [{
     titulo: 'Inside Out 2',
     fechaLanzamiento: new Date(),
     precio: 1400.99,
@@ -184,6 +223,7 @@ export class FiltroPeliculasComponent implements OnInit {
     proximosEstrenos: false
   }];
 
-  peliculas = this.peliculasOriginal;
+  peliculas = this.peliculasOriginal; */
 
 }
+

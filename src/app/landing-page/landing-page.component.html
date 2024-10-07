@@ -1,14 +1,30 @@
-<!--<app-rating [maximoRating]="5" (votado)="procesarVoto($event)"></app-rating>-->
+<!-- <app-autorizado rol="admin">
+    <ng-container autorizado>
+        <div>
+            Estás autorizado
+        </div>
+    </ng-container>
+    <ng-container noAutorizado>
+        <div>
+            No estás autorizado
+        </div>
+    </ng-container>
+</app-autorizado> -->
 
+
+
+
+
+<!--<app-rating [maximoRating]="5" (votado)="procesarVoto($event)"></app-rating>-->
 
 
 <h2>En Cines</h2>
 
-<app-listado-peliculas [peliculas]="peliculasEnCines"></app-listado-peliculas>
+<app-listado-peliculas [peliculas]="peliculasEnCines" (borrado)="peliculaBorrada()"></app-listado-peliculas>
 
 <h2>Próximos estrenos</h2>
 
-<app-listado-peliculas [peliculas]="peliculasProximosEstrenos"></app-listado-peliculas>
+<app-listado-peliculas [peliculas]="peliculasProximosEstrenos" (borrado)="peliculaBorrada()"></app-listado-peliculas>
 
 <!--<input type="file" style="display:none;" #cargadorArchivos>
 <button (click)="cargadorArchivos.click()">Cargar archivo</button>-->

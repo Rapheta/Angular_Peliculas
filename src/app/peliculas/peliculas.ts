@@ -7,7 +7,10 @@ export interface PeliculaDTO {
     titulo: string;
     fechaLanzamiento: Date;
     trailer: string;
-    poster?: string
+    poster?: string;
+    generos?: GeneroDto[];
+    cines?: CineDTO[];
+    actores: actorAutocompleteDTO[];
 }
 
 export interface PeliculaCreacionDTO {
@@ -23,4 +26,18 @@ export interface PeliculaCreacionDTO {
 export interface PeliculasPostGetDTO {
     generos: GeneroDto[];
     cines: CineDTO[];
+}
+
+export interface LandingPageDTO {
+    enCines: PeliculaDTO[];
+    proximosEstrenos: PeliculaDTO[];
+}
+
+export interface PeliculasPutGetDTO {
+    pelicula: PeliculaDTO;
+    generosSeleccionados: GeneroDto[];
+    generosNoSeleccionados: GeneroDto[];
+    cinesSeleccionados: CineDTO[];
+    cinesNoSeleccionados: CineDTO[];
+    actores: actorAutocompleteDTO[];
 }
